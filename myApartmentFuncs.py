@@ -1,3 +1,5 @@
+import pandas as pd
+
 from ApartmentClass import *
 
 def getDate():
@@ -10,6 +12,7 @@ def getDate():
 
 def BiweeklySimulate(renter, firstMonthAmt):
   print("~"*25, "SAVING UP FOR YOUR FIRST MONTH", "~"*25)
+  yearReceipt = {}
   week = 1
   payDate = getDate()
   next = timedelta(7)
@@ -21,6 +24,7 @@ def BiweeklySimulate(renter, firstMonthAmt):
       if week % 4 == 0:
         renter.loseMoney(True)
         print(f"Month balance: {renter.balance}")
+        yearReceipt[str(payDate.month) + "/" + str(payDate.year)] = renter.balance
 
     week += 1
   print(f"At the current expenditures, I calculated that in {week} weeks, you will break even with the first month's costs with a surplus of:")
@@ -29,7 +33,7 @@ def BiweeklySimulate(renter, firstMonthAmt):
     print(f"Which means you should wait two weeks (a paycheck) after {week} weeks to move out! Just to be on the safe side\n")
   else:
     print("Awesome! You're set for next month as well!\n")
-  return payDate, week
+  return payDate, week, yearReceipt
 
 
 def getRenterInfo():
@@ -45,12 +49,12 @@ def getRenterInfo():
 
     return renter
 
-def yearSimulator(renter, payDate, week):
-  yearReceipt = {}
+def yearSimulator(renter, payDate, week, yearReceipt):
   print("~" * 25, "A RECEIPT OF YOUR FIRST YEAR OF HAVING MOVED OUT", "~" * 25)
   present = date.today()
   next = timedelta(7)
-  while payDate < (date(present.year+1, 5, 24)):
+  year = int(input("What year did you want to run the simulation to?\n"))
+  while payDate < (date(year, 5, 24)):
     payDate += next
     if week % 2 == 0:
       print(f"{payDate}:")
@@ -78,6 +82,41 @@ def brokeCheck(renter):
     if broke == False:
         print(f"You have a surplus of: ${check}")
         print("Congrats! You can afford to move out!\n")
-    payDate, week = BiweeklySimulate(renter, firstMonthAmt)
+    payDate, week, yearReceipt = BiweeklySimulate(renter, firstMonthAmt)
 
-    return firstMonthAmt, payDate, week
+    return firstMonthAmt, payDate, week, yearReceipt
+
+def getHisto(yearReceipt):
+    data = {'date': yearReceipt.keys(),
+            'balance': yearReceipt.values()}
+    new = pd.DataFrame.from_dict(data)
+
+    df = pd.DataFrame(new, columns=['date', 'balance'])
+
+    x = df['date']
+    y = df['balance']
+
+    plt.plot(x, y, color='red', marker='o')
+    plt.title('balance Vs date', fontsize=14)
+    plt.xlabel('date', fontsize=14)
+    plt.ylabel('balance', fontsize=14)
+    plt.grid(True)
+    plt.show()
+    return df
+
+def getStats(renter):
+    print("~"*25,"RENTER STATS","~"*25)
+    d = {
+        'Pay per paycheck (bi-weekly)':['-'],
+        'Part-Time': [renter.payPart],
+        'Full-Time': [renter.payFull]
+    }
+    pay_df = pd.DataFrame(d)
+    print(pay_df)
+
+    losses = {
+        'losses': ['Bills', 'Fun', 'Food', 'Rent'],
+        'amounts' : renter.loss,
+    }
+    loss_df = pd.DataFrame(losses)
+    print('\n', loss_df)

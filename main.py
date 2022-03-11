@@ -1,25 +1,14 @@
 from myApartmentFuncs import *
 from ApartmentClass import *
-import matplotlib.pyplot as plt
-import pandas as pd
 
-present = date.today()
 
 renter = getRenterInfo()
 
-firstMonthAmt, payDate, week = brokeCheck(renter)
+firstMonthAmt, payDate, week, yearReceipt = brokeCheck(renter)
 
-yearReceipt = yearSimulator(renter,payDate, week)
+yearReceipt = yearSimulator(renter, payDate, week, yearReceipt)
 
-data = {'date': yearReceipt.keys(),
-        'balance': yearReceipt.values()}
-new = pd.DataFrame.from_dict(data)
+getStats(renter)
 
-df = pd.DataFrame(new, columns=['date', 'balance'])
+getHisto(yearReceipt)
 
-plt.plot(df['date'], df['balance'], color='red', marker='o')
-plt.title('balance Vs date', fontsize=14)
-plt.xlabel('date', fontsize=14)
-plt.ylabel('balance', fontsize=14)
-plt.grid(True)
-plt.show()

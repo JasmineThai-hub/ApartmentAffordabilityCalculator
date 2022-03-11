@@ -1,6 +1,9 @@
 from datetime import date
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
+import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
 
 class Renter:
     def __init__(self, name, balance):
@@ -38,8 +41,7 @@ class Renter:
         self.payPart = int(input("How much do you make part-time bi-weekly?\n"))
 
     def getMoney(self, payDate):
-        present = date.today()
-        fullTimeDate = [date(present.year, 5, 20), date(present.year, 8, 8)]
+        fullTimeDate = [date(payDate.year, 5, 20), date(payDate.year, 8, 8)]
         if fullTimeDate[0] < payDate < fullTimeDate[1]:
             self.balance += self.payFull
             print(f"+{self.payFull}")
