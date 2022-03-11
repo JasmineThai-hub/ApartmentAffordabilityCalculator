@@ -1,7 +1,6 @@
 from ApartmentClass import *
 
-def getDate():
-    payDate = input("When did you last get paid?\n")
+def getDate(payDate):
     new = payDate.split('/')
     d = [int(x) for x in new]  # turn the given string data to ints
     # year, month, day
@@ -44,22 +43,22 @@ def BiweeklySimulate(renter, firstMonthAmt):
   print("~"*25, "SAVING UP FOR YOUR FIRST MONTH", "~"*25)
   yearReceipt = {}
   week = 1
-  payDate = getDate()
+  payDate = getDate(input("When did you last get paid?\n"))
   next = timedelta(7)
-  while renter.balance < (firstMonthAmt):
+  while renter.balance <= (firstMonthAmt):
     payDate += next
     if week % 2 == 0:
       print(f"{payDate}:")
-      renter.getMoney(payDate)
+      renter.getMoneyStud(payDate)
       if week % 4 == 0:
         renter.loseMoney(True)
         print(f"Month balance: {renter.balance}")
-        yearReceipt[str(payDate.month) + "/" + str(payDate.year)] = renter.balance
+        yearReceipt[str(payDate.month) + "/" + str(payDate.year)[2::]] = renter.balance
 
     week += 1
   print(f"At the current expenditures, I calculated that in {week} weeks, you will break even with the first month's costs with a surplus of:")
   print(f"${renter.balance - firstMonthAmt}\n")
-  if renter.balance < sum(renter.loss):
+  if renter.balance < sum(renter.loss)+firstMonthAmt:
     print(f"Which means you should wait two weeks (a paycheck) after {week} weeks to move out! Just to be on the safe side\n")
   else:
     print("Awesome! You're set for next month as well!\n")
@@ -67,18 +66,22 @@ def BiweeklySimulate(renter, firstMonthAmt):
 
 def yearSimulator(renter, payDate, week, yearReceipt):
   print("~" * 25, "A RECEIPT OF YOUR FIRST YEAR OF HAVING MOVED OUT", "~" * 25)
-  present = date.today()
   next = timedelta(7)
   year = int(input("What year did you want to run the simulation to?\n"))
+  grad = getDate(input("When do you graduate?\n"))
+  renter.setSalary()
   while payDate < (date(year, 5, 24)):
     payDate += next
     if week % 2 == 0:
       print(f"{payDate}:")
-      renter.getMoney(payDate)
+      if payDate >= grad:
+        renter.getMoneyFull()
+      else:
+        renter.getMoneyStud(payDate)
       if week % 4 == 0:
         renter.loseMoney(False)
         print(f"Month balance: {renter.balance}")
-        yearReceipt[str(payDate.month)+"/"+str(payDate.year)] = renter.balance
+        yearReceipt[str(payDate.month)+"/"+str(payDate.year)[2::]] = renter.balance
     week += 1
   return yearReceipt
 
@@ -105,7 +108,8 @@ def getStats(renter):
     d = {
         'Pay per paycheck (bi-weekly)':['-'],
         'Part-Time': [renter.payPart],
-        'Full-Time': [renter.payFull]
+        'Full-Time': [renter.payFull],
+        'Salary': [renter.salary]
     }
     pay_df = pd.DataFrame(d)
     print(pay_df)
@@ -116,3 +120,4 @@ def getStats(renter):
     }
     loss_df = pd.DataFrame(losses)
     print('\n', loss_df)
+    print(f"Total: {sum(renter.loss)}")

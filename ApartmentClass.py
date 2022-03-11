@@ -40,7 +40,7 @@ class Renter:
     def setPartTimepay(self):
         self.payPart = int(input("How much do you make part-time bi-weekly?\n"))
 
-    def getMoney(self, payDate):
+    def getMoneyStud(self, payDate):
         fullTimeDate = [date(payDate.year, 5, 20), date(payDate.year, 8, 8)]
         if fullTimeDate[0] < payDate < fullTimeDate[1]:
             self.balance += self.payFull
@@ -50,7 +50,13 @@ class Renter:
             self.balance += self.payPart
             print(f"+{self.payPart}")
 
+    def getMoneyFull(self):
+        self.payFull = self.salary/24
+        self.balance += self.payFull
+        print(f"+{self.payFull}")
 
+    def setSalary(self):
+        self.salary = int(input("What would be your yearly salary?\n"))
 
 
 
