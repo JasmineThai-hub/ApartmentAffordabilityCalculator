@@ -1,6 +1,6 @@
 # ApartmentAffordabilityCalculator
 
-##Decription:
+Decription:
 My program asks users for their financial information and prospective financial information.
 This is catered towards students like myself so it calculates when I can move out if I don't have enough money for the first month.
 Then it asks to what year I wanted to simulate my finances until, my graduation date and prospective salary upon graduating to show a graph and stats at the end for users to analyze if it is actually reasonable to move out right now.
