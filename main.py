@@ -1,7 +1,6 @@
 from myApartmentFuncs import *
 from ApartmentClass import *
 
-
 renter = getRenterInfo()
 
 firstMonthAmt, payDate, week, yearReceipt = brokeCheck(renter)
