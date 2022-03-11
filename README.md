@@ -1,4 +1,4 @@
-# ApartmentAffordabilityCalculator
+# Apartment Affordability Calculator
 
 Decription:
 My program asks users for their financial information and prospective financial information.
