@@ -65,7 +65,7 @@ def BiweeklySimulate(renter, firstMonthAmt):
   return payDate, week, yearReceipt
 
 def yearSimulator(renter, payDate, week, yearReceipt):
-  print("~" * 25, "A RECEIPT OF YOUR FIRST YEAR OF HAVING MOVED OUT", "~" * 25)
+  print("~" * 25, "A RECEIPT OF YOUR YEAR OF HAVING MOVED OUT", "~" * 25)
   next = timedelta(7)
   year = int(input("What year did you want to run the simulation to?\n"))
   grad = getDate(input("When do you graduate?\n"))
